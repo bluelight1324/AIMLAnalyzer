@@ -66,7 +66,8 @@ namespace AIMLAnalyzer
             {
                 string report; 
 
-                report = "\nFile Report: \"" + file + "\"\n" + analyze.CategoryScan(file) + "\n" + analyze.PatternScan(file) + "\n" + analyze.TemplateScan(file);
+                report = "\nFile Report: \"" + file + "\"\n" + analyze.CategoryScan(file) + "\n" + 
+                    analyze.PatternScan(file) + "\n" + analyze.TemplateScan(file) + "\n" + analyze.RandomScan(file);
                 Log(report);
 
             }
