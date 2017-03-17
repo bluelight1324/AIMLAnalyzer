@@ -38,7 +38,7 @@ namespace AIMLAnalyzer
                 else if (FoundCat && line.Contains("<category>"))
                 {
                     UnCloseCat++;
-                    report_Unclosed += "\nMT: Line: " + (i - 1);
+                    report_Unclosed += "\nMissing Tag: Line: " + (i);
                 }
 
                 i++;
@@ -47,10 +47,10 @@ namespace AIMLAnalyzer
             read.Close();
             if (UnCloseCat > 0)
             {
-                return "Found Unit(s) of Knowledge: " + CountCat + "\nFound Unclosed Tag(s): " + UnCloseCat + "\nReport:\n " + report_Unclosed;
+                return "Found ::<category>:: Unit(s) of Knowledge: " + CountCat + "\nFound Unclosed Tag(s): " + UnCloseCat + "\nReport:\n " + report_Unclosed;
             } else
             {
-                return "Found Unit(s) of Knowledge: " + CountCat + "\nFound Unclosed Tag(s): " + UnCloseCat + "\nReport: OK";
+                return "Found ::<category>:: Unit(s) of Knowledge: " + CountCat + "\nFound Unclosed Tag(s): " + UnCloseCat + "\nReport: OK";
             }
             
         }
@@ -83,7 +83,7 @@ namespace AIMLAnalyzer
                 else if (FoundPat && line.Contains("<pattern>"))
                 {
                     UnClosedPat++;
-                    report_Unclosed += "\nMT: Line: " + (i - 1);
+                    report_Unclosed += "\nMissing Tag: Line: " + (i);
                 }
 
                 i++;
@@ -92,10 +92,10 @@ namespace AIMLAnalyzer
             read.Close();
             if (UnClosedPat > 0)
             {
-               return "Found Pattern(s): " + CountPat + "\nFound Unclosed Tag(s): " + UnClosedPat + "\nReport:\n " + report_Unclosed;
+               return "Found ::<pattern>:: [Human Question]: " + CountPat + "\nFound Unclosed Tag(s): " + UnClosedPat + "\nReport:\n " + report_Unclosed;
             } else
             {
-                return "Found Pattern(s): " + CountPat + "\nFound Unclosed Tag(s): " + UnClosedPat + "\nReport: OK";
+                return "Found ::<pattern>:: [Human Question]: " + CountPat + "\nFound Unclosed Tag(s): " + UnClosedPat + "\nReport: OK";
             }
             
         }
@@ -128,7 +128,7 @@ namespace AIMLAnalyzer
                 else if (FoundTemp && line.Contains("<template>"))
                 {
                     UnClosedTemp++;
-                    report_Unclosed += "\nMT: Line: " + (i - 1);
+                    report_Unclosed += "\nMissing Tag: Line: " + (1);
                 }
 
                 i++;
@@ -137,10 +137,10 @@ namespace AIMLAnalyzer
             read.Close();
             if (UnClosedTemp > 0)
             {
-                return "Found Templates(s): " + CountTemp + "\nFound Unclosed Tag(s): " + UnClosedTemp + "\nReport:\n " + report_Unclosed;
+                return "Found ::<template> [AI Responds]: " + CountTemp + "\nFound Unclosed Tag(s): " + UnClosedTemp + "\nReport:\n " + report_Unclosed;
             } else
             {
-                return "Found Templates(s): " + CountTemp + "\nFound Unclosed Tag(s): " + UnClosedTemp + "\nReport: OK";
+                return "Found ::<template> [AI Responds]: " + CountTemp + "\nFound Unclosed Tag(s): " + UnClosedTemp + "\nReport: OK";
             }
         }
         public string RandomScan(string file)
@@ -171,13 +171,13 @@ namespace AIMLAnalyzer
                             CountLi += nLi;
                         } else
                         {
-                            report_UnClosedLi += "\nMT: Line: " + (i - 1);
+                            report_UnClosedLi += "\nMissing Tag: Line: " + (i);
                         }
 
                         CountRan++;
                     } else if (line.Contains("<li>"))
                     {
-                        report_UnClosedLi += "\nMT: Line: " + (i - 1);
+                        report_UnClosedLi += "\nMissing Tag: Line: " + (i);
                     }
                 } else if (line.Contains("<random>") && FoundRan == false)
                 {
@@ -196,7 +196,7 @@ namespace AIMLAnalyzer
                         FoundLi = false;
                     } else if(line.Contains("</li>") && FoundLi)
                     {
-                        report_UnClosedLi += "\nMT: Line: " + (i - 1);
+                        report_UnClosedLi += "\nMissing Tag: Line: " + (i);
                         UnClosedLi++;
                     }
                 } else if (FoundRan && line.Contains("</random>"))
@@ -204,7 +204,7 @@ namespace AIMLAnalyzer
                     CountRan++;
                 } else if (FoundRan && line.Contains("<random>"))
                 {
-                    report_UnclosedRan += "\nMT: Line: " + (i - 1);
+                    report_UnclosedRan += "\nMissing Tag: Line: " + (i - 1);
                 }
 
                 i++;
@@ -213,8 +213,8 @@ namespace AIMLAnalyzer
             read.Close();
             if (UnClosedRan > 0 && UnClosedLi > 0)
             {
-                return "\nFix Answers: " + CountRan + " with " +
-                    "\nDefined Possiblities: " + CountLi +
+                return "\nFound ::<random>:: [AI Answer Blocks]: " + CountRan + 
+                    "\nFound ::<li>:: [AI Random Answers]: " + CountLi +
                     "\nFound <random> Unclosed Tag(s): " + UnClosedRan +
                     "\nReport:\n " + report_UnclosedRan +
                     "\nFound <li> Unclosed Tag(s): " + UnClosedLi +
@@ -222,28 +222,29 @@ namespace AIMLAnalyzer
             }
             else if (UnClosedLi > 0 && UnClosedRan < 0)
             {
-                return "\nFix Answers: " + CountRan + " with " +
-                    "\nDefined Possiblities: " + CountLi +
+                return "\nFound ::<random>:: [AI Answer Blocks]: " + CountRan + 
+                    "\nFound ::<li>:: [AI Random Answers]: " + CountLi +
                     "\nFound <random> Unclosed Tag(s): " + UnClosedRan +
                     "\nReport: OK" +
-                    "\nFound <li> Unclosed Tag(s): " + UnClosedLi;
+                    "\nFound <li> Unclosed Tag(s): " + UnClosedLi +
+                    "\nReport:\n " + report_UnClosedLi;
 
             } else if (UnClosedRan > 0 && UnClosedLi < 0 )
             {
-                return "\nFix Answers: " + CountRan + " with " +
-                    "\nDefined Possiblities: " + CountLi +
+                return "\nFound ::<random>:: [AI Answer Blocks]: " + CountRan +
+                    "\nFound ::<li>:: [AI Random Answers]: " + CountLi +
                     "\nFound <random> Unclosed Tag(s): " + UnClosedRan +
                     "\nReport:\n " + report_UnclosedRan +
                     "\nFound <li> Unclosed Tag(s): " + UnClosedLi +
                     "\nReport: OK";
             } else
             {
-                return "\nFix Answers: " + CountRan + " with " +
-                    "\nDefined Possiblities: " + CountLi +
-                    "\nFound <random> Unclosed Tag(s): " + UnClosedRan +
-                    "\nReport: OK" +
-                    "\nFound <li> Unclosed Tag(s): " + UnClosedLi +
-                    "\nReport: OK";
+                return "\nFound ::<random>:: [AI Answer Blocks]: " + CountRan + 
+                     "\nFound ::<li>:: [AI Random Answers]: " + CountLi +
+                     "\nFound <random> Unclosed Tag(s): " + UnClosedRan +
+                     "\nReport: OK" +
+                     "\nFound <li> Unclosed Tag(s): " + UnClosedLi +
+                     "\nReport: OK";
             }
 
         }
