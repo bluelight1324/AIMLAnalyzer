@@ -38,7 +38,7 @@ namespace AIMLAnalyzer
                 else if (FoundCat && line.Contains("<category>"))
                 {
                     UnCloseCat++;
-                    report_Unclosed += "\nMissing Tag: Line: " + (i);
+                    report_Unclosed += "\nMissing Tag: Line: " + (i-1);
                 }
 
                 i++;
@@ -83,7 +83,7 @@ namespace AIMLAnalyzer
                 else if (FoundPat && line.Contains("<pattern>"))
                 {
                     UnClosedPat++;
-                    report_Unclosed += "\nMissing Tag: Line: " + (i);
+                    report_Unclosed += "\nMissing Tag: Line: " + (i - 1);
                 }
 
                 i++;
@@ -128,7 +128,7 @@ namespace AIMLAnalyzer
                 else if (FoundTemp && line.Contains("<template>"))
                 {
                     UnClosedTemp++;
-                    report_Unclosed += "\nMissing Tag: Line: " + (1);
+                    report_Unclosed += "\nMissing Tag: Line: " + (i - 1);
                 }
 
                 i++;
@@ -166,18 +166,18 @@ namespace AIMLAnalyzer
                         int nLi = Regex.Matches(Regex.Escape(line), "<li>").Count;
                         int notLi = Regex.Matches(Regex.Escape(line), "</li>").Count;
 
-                        if ((nLi + notLi) /2 == 0)
+                        if ((nLi + notLi) % 2 == 0)
                         {
                             CountLi += nLi;
                         } else
                         {
-                            report_UnClosedLi += "\nMissing Tag: Line: " + (i);
+                            report_UnClosedLi += "\nMissing Tag: Line: " + (i - 1);
                         }
 
                         CountRan++;
                     } else if (line.Contains("<li>"))
                     {
-                        report_UnClosedLi += "\nMissing Tag: Line: " + (i);
+                        report_UnClosedLi += "\nMissing Tag: Line: " + (i - 1);
                     }
                 } else if (line.Contains("<random>") && FoundRan == false)
                 {
@@ -196,12 +196,13 @@ namespace AIMLAnalyzer
                         FoundLi = false;
                     } else if(line.Contains("</li>") && FoundLi)
                     {
-                        report_UnClosedLi += "\nMissing Tag: Line: " + (i);
+                        report_UnClosedLi += "\nMissing Tag: Line: " + (i - 1);
                         UnClosedLi++;
                     }
                 } else if (FoundRan && line.Contains("</random>"))
                 {
                     CountRan++;
+                    FoundRan = false;
                 } else if (FoundRan && line.Contains("<random>"))
                 {
                     report_UnclosedRan += "\nMissing Tag: Line: " + (i - 1);
